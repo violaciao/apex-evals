@@ -247,6 +247,91 @@ def build_l4_agent_fn(verbose: bool = False):
     return agent_fn
 
 
+def build_l1_agent_fn(verbose: bool = False):
+    """
+    Returns an async callable for L1 (Tool Selection) evals:
+        async (query, tool_schema, env_state) -> {
+            "selected_tool_name": str,
+            "selected_tool_args": dict,
+            "tool_called": bool,
+            "agent_response": str,
+        }
+
+    Presents the agent with a query and a set of available tools.
+    Captures whether any tool was called and which one.
+    No prior call chain is injected — tests the first tool selection decision only.
+
+    env_state keys:
+        available_tools: list[{"name", "description", "parameters"}]
+        context: optional str — background context that resolves ambiguity (L1.4)
+    """
+    llm = get_llm()
+
+    _SYSTEM = (
+        "You are a helpful assistant with access to tools. "
+        "Use the provided tools when the question requires live, current, or stored data. "
+        "Answer directly from your knowledge when the question is factual and does not require live data."
+    )
+
+    async def agent_fn(
+        query: str,
+        tool_schema: dict[str, Any],
+        env_state: dict[str, Any],
+    ) -> dict[str, Any]:
+        available_tools: list[dict] = env_state.get("available_tools", [])
+        context: str = env_state.get("context", "")
+
+        user_content = f"Context: {context}\n\nQuestion: {query}" if context else query
+
+        messages = [
+            ChatMessage(role=MessageRole.SYSTEM, content=_SYSTEM),
+            ChatMessage(role=MessageRole.USER, content=user_content),
+        ]
+
+        tools_spec = [
+            {
+                "name": t["name"],
+                "description": t["description"],
+                "input_schema": {
+                    "type": "object",
+                    "properties": t.get("parameters", {}),
+                },
+            }
+            for t in available_tools
+        ]
+
+        response = await llm.achat(messages=messages, tools=tools_spec)
+        response_text = response.message.content or ""
+        additional_kwargs = response.message.additional_kwargs or {}
+
+        selected_tool_name = ""
+        selected_tool_args: dict = {}
+        tool_calls = additional_kwargs.get("tool_calls", [])
+        if tool_calls:
+            try:
+                fn = tool_calls[0].get("function", {})
+                selected_tool_name = fn.get("name", "")
+                raw_args = fn.get("arguments", "{}")
+                selected_tool_args = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+            except (json.JSONDecodeError, KeyError, IndexError):
+                pass
+
+        if verbose:
+            print(f"\n[l1-agent] query:    {query}")
+            print(f"[l1-agent] context:  {context[:100] if context else '(none)'}")
+            print(f"[l1-agent] tool:     {selected_tool_name}({selected_tool_args})")
+            print(f"[l1-agent] response: {response_text[:200]}")
+
+        return {
+            "selected_tool_name": selected_tool_name,
+            "selected_tool_args": selected_tool_args,
+            "tool_called": bool(selected_tool_name),
+            "agent_response": response_text,
+        }
+
+    return agent_fn
+
+
 def build_l3_agent_fn(verbose: bool = False):
     """
     Returns an async callable for L3 (Output Consumption) evals:

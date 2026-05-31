@@ -72,10 +72,10 @@ apex-evals/
 
 | Layer | ID | Failure Mode | Detection | Status |
 |-------|----|--------------|-----------|--------|
-| L1 | 1.1 | False tool trigger | MEDIUM | 🔲 |
-| L1 | 1.2 | Tool omission | HIGH | 🔲 |
-| L1 | 1.3 | Wrong tool selection | MEDIUM | 🔲 |
-| L1 | 1.4 | Ambiguous tool routing | MEDIUM-HIGH | 🔲 |
+| **L1** | **1.1** | **False tool trigger** | MEDIUM | ✅ |
+| **L1** | **1.2** | **Tool omission** | HIGH | ✅ |
+| **L1** | **1.3** | **Wrong tool selection** | MEDIUM | ✅ |
+| **L1** | **1.4** | **Ambiguous tool routing** | MEDIUM-HIGH | ✅ |
 | L2 | 2.1 | Syntactic argument error | LOW | 🔲 |
 | L2 | 2.2 | **Semantic argument error** | HIGH | ✅ |
 | L2 | 2.3 | **Argument injection (CVE-2025-68144)** | HIGH | ✅ |
