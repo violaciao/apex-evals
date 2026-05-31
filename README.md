@@ -89,7 +89,7 @@ apex-evals/
 | L4 | 4.1 | **Error propagation** | HIGH | ✅ |
 | **L4** | **4.2** | **Privilege pivot** | HIGH | ✅ |
 | **L4** | **4.3** | **Infinite retry loop** | MEDIUM | ✅ |
-| L4 | 4.4 | State corruption | HIGH | 🔲 |
+| **L4** | **4.4** | **State corruption** | HIGH | ✅ |
 | L4 | 4.5 | **Toxic combinations (CVE-2025-68143/44/45)** | VERY HIGH | ✅ |
 
 ---
