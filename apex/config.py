@@ -13,6 +13,14 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 
+try:
+    from dotenv import load_dotenv
+except ImportError:  # pragma: no cover - dependency is installed in normal envs
+    def load_dotenv(*args, **kwargs):
+        return False
+
+
+load_dotenv()
 
 PROFILE = os.getenv("APEX_PROFILE", "free")  # "standard" | "free"
 

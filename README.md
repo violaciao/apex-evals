@@ -122,11 +122,14 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -e ".[dev]"
 
-# Set free-tier API key
-export GROQ_API_KEY=your_key_here
+# Set free-tier API key in a local .env file
+printf "APEX_PROFILE=free\nGROQ_API_KEY=your_key_here\n" > .env
 
 # Run unit tests (zero API cost)
 pytest tests/layer2/ -v -k "not live"
+
+# Open demo notebooks
+jupyter notebook demos/
 
 # Run live eval (Groq free tier)
 APEX_PROFILE=free pytest tests/layer2/test_semantic_arg_error.py::test_live_all_scenarios -v -s

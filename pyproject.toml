@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "apex-evals"
@@ -22,6 +22,8 @@ dependencies = [
     "llama-index-tools-mcp>=0.1.0",
     # Trace recording
     "vcrpy>=6.0.0",
+    # Local environment variables
+    "python-dotenv>=1.0.0",
     # Testing
     "pytest>=8.0.0",
     "pytest-asyncio>=0.23.0",
@@ -45,6 +47,8 @@ standard = [
 dev = [
     "ruff>=0.4.0",
     "mypy>=1.10.0",
+    "notebook>=7.0.0",
+    "ipykernel>=6.0.0",
 ]
 
 [tool.pytest.ini_options]
