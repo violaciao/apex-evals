@@ -78,7 +78,7 @@ apex-evals/
 | L1 | Ambiguous tool routing | 🔲 |
 | L2 | Syntactic argument error | 🔲 |
 | **L2** | **Semantic argument error** | **✅** |
-| L2 | Argument injection (CVE-2025-68144) | 🔲 |
+| **L2** | **Argument injection (CVE-2025-68144)** | **✅** |
 | L2 | Schema mismatch | 🔲 |
 | L2 | Over/under-scoped query | 🔲 |
 | **L3** | **Result hallucination completion** | **✅** |
