@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "apex-evals"
+version = "0.1.0"
+description = "APEX: Agentic Pipeline EXecution Diagnostic Framework — evaluation suite"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    # Agent harness (industry standard)
+    "llama-index>=0.11.0",
+    "llama-index-llms-openai>=0.3.0",
+    "llama-index-llms-anthropic>=0.3.0",
+    # Free runtime
+    "llama-index-llms-groq>=0.2.0",
+    "groq>=0.9.0",
+    # Tool / MCP layer
+    "llama-index-tools-mcp>=0.1.0",
+    # Trace recording
+    "vcrpy>=6.0.0",
+    # Testing
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-recording>=0.13.0",  # vcrpy pytest integration
+    # Lightweight local DB stub
+    "sqlalchemy>=2.0.0",
+    "aiosqlite>=0.20.0",
+    # Scoring / reporting
+    "pydantic>=2.0.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+standard = [
+    "anthropic>=0.30.0",
+    "openai>=1.40.0",
+    "testcontainers[postgres]>=4.0.0",
+]
+dev = [
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "layer1: Tool Selection failure modes",
+    "layer2: Input Construction failure modes",
+    "layer3: Output Consumption failure modes",
+    "layer4: Chain & Multi-Tool failure modes",
+    "standard: requires paid API keys",
+    "free: runs on free tier only",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
