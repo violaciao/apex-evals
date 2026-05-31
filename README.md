@@ -28,7 +28,7 @@ apex-evals/
 ├── apex/
 │   ├── config.py                        # LLM profile switching (free / anthropic / openai / gemini / mistral)
 │   ├── base.py                          # EvalModule base class, Scenario, EvalResult dataclasses
-│   ├── harness.py                       # LlamaIndex agent runners (L2 tool-call, L3 synthesis)
+│   ├── harness.py                       # LlamaIndex agent runners for L1/L2/L3/L4 evals
 │   │
 │   ├── layer1_tool_selection/
 │   │   ├── false_tool_trigger.py        # agent calls a tool when none was needed
@@ -60,9 +60,26 @@ apex-evals/
 │   └── primitives/                      # 3 cross-layer scorers (intent alignment, trust calibration, chain attribution)
 │
 ├── fixtures/                            # SQL schemas, pre-recorded agent traces, vcrpy cassettes
-├── tests/                               # pytest suites mirroring apex/ layer structure
+├── demos/                               # notebooks showing offline scoring and live eval workflows
+├── tests/
+│   ├── layer1/                          # L1 tool selection tests
+│   ├── layer2/                          # L2 input construction tests
+│   ├── layer3/                          # L3 output consumption tests
+│   └── layer4/                          # L4 chain and multi-tool tests
 └── reports/                             # eval run outputs
 ```
+
+---
+
+## Demos
+
+Interactive examples should live in `demos/`:
+
+- `01_offline_scoring.ipynb` — run evaluator scoring with no API key or LLM calls
+- `02_live_groq_eval.ipynb` — run a free-tier live eval with Groq
+- `03_compare_failure_modes.ipynb` — compare scores across implemented layers
+
+Start with `01_offline_scoring.ipynb`; it is the most stable onboarding path and works without API access.
 
 ---
 
@@ -77,20 +94,20 @@ apex-evals/
 | **L1** | **1.3** | **Wrong tool selection** | MEDIUM | ✅ |
 | **L1** | **1.4** | **Ambiguous tool routing** | MEDIUM-HIGH | ✅ |
 | L2 | 2.1 | Syntactic argument error | LOW | 🔲 |
-| L2 | 2.2 | **Semantic argument error** | HIGH | ✅ |
+| **L2** | **2.2** | **Semantic argument error** | HIGH | ✅ |
 | L2 | 2.3 | **Argument injection (CVE-2025-68144)** | HIGH | ✅ |
 | L2 | 2.4 | Schema mismatch | MEDIUM | 🔲 |
 | L2 | 2.5 | Over/under-scoped query | MEDIUM | 🔲 |
-| L3 | 3.1 | **Result hallucination completion** | HIGH | ✅ |
-| L3 | 3.2 | Stale data trust | HIGH | 🔲 |
+| **L3** | **3.1** | **Result hallucination completion** | HIGH | ✅ |
+| **L3** | **3.2** | **Stale data trust** | HIGH | ✅ |
 | L3 | 3.3 | Misinterpretation of format | MEDIUM | 🔲 |
 | L3 | 3.4 | Prompt injection via result | HIGH | 🔲 |
 | L3 | 3.5 | Overconfident trust | HIGH | 🔲 |
-| L4 | 4.1 | **Error propagation** | HIGH | ✅ |
+| **L4** | **4.1** | **Error propagation** | HIGH | ✅ |
 | **L4** | **4.2** | **Privilege pivot** | HIGH | ✅ |
 | **L4** | **4.3** | **Infinite retry loop** | MEDIUM | ✅ |
 | **L4** | **4.4** | **State corruption** | HIGH | ✅ |
-| L4 | 4.5 | **Toxic combinations (CVE-2025-68143/44/45)** | VERY HIGH | ✅ |
+| **L4** | **4.5** | **Toxic combinations (CVE-2025-68143/44/45)** | VERY HIGH | ✅ |
 
 ---
 
@@ -120,10 +137,10 @@ APEX_PROFILE=free pytest tests/layer2/test_semantic_arg_error.py::test_live_all_
 | Profile | LLM | Tools | Cost |
 |---------|-----|-------|------|
 | `free` (default) | Groq Llama-3.1-8b-instant | SQLite stubs | $0 |
-| `anthropic` | Anthropic Claude Sonnet 4 | Testcontainers + real APIs | pay-per-call |
-| `openai` | OpenAI GPT-4o | Testcontainers + real APIs | pay-per-call |
-| `gemini` | Google Gemini 2.5 Pro | Testcontainers + real APIs | pay-per-call |
-| `mistral` | Mistral Large | Testcontainers + real APIs | pay-per-call |
+| `anthropic` | Anthropic Claude Sonnet 4 | Testcontainers + APIs | pay-per-call |
+| `openai` | OpenAI GPT-4o | Testcontainers + APIs | pay-per-call |
+| `gemini` | Google Gemini 2.5 Pro | Testcontainers + APIs | pay-per-call |
+| `mistral` | Mistral Large | Testcontainers + APIs | pay-per-call |
 
 ```bash
 # Anthropic
