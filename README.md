@@ -70,27 +70,27 @@ apex-evals/
 
 ![Layer architecture](assets/images/layers.png)
 
-| Layer | Failure Mode | Status |
-|-------|-------------|--------|
-| L1 | False tool trigger | 🔲 |
-| L1 | Tool omission | 🔲 |
-| L1 | Wrong tool selection | 🔲 |
-| L1 | Ambiguous tool routing | 🔲 |
-| L2 | Syntactic argument error | 🔲 |
-| **L2** | **Semantic argument error** | **✅** |
-| **L2** | **Argument injection (CVE-2025-68144)** | **✅** |
-| L2 | Schema mismatch | 🔲 |
-| L2 | Over/under-scoped query | 🔲 |
-| **L3** | **Result hallucination completion** | **✅** |
-| L3 | Stale data trust | 🔲 |
-| L3 | Misinterpretation of format | 🔲 |
-| L3 | Prompt injection via result | 🔲 |
-| L3 | Overconfident trust | 🔲 |
-| L4 | Error propagation | 🔲 |
-| L4 | Privilege pivot | 🔲 |
-| L4 | Infinite retry loop | 🔲 |
-| L4 | State corruption | 🔲 |
-| **L4** | **Toxic combinations** | **✅** |
+| Layer | ID | Failure Mode | Detection | Status |
+|-------|----|--------------|-----------|--------|
+| L1 | 1.1 | False tool trigger | MEDIUM | 🔲 |
+| L1 | 1.2 | Tool omission | HIGH | 🔲 |
+| L1 | 1.3 | Wrong tool selection | MEDIUM | 🔲 |
+| L1 | 1.4 | Ambiguous tool routing | MEDIUM-HIGH | 🔲 |
+| L2 | 2.1 | Syntactic argument error | LOW | 🔲 |
+| L2 | 2.2 | **Semantic argument error** | HIGH | ✅ |
+| L2 | 2.3 | **Argument injection (CVE-2025-68144)** | HIGH | ✅ |
+| L2 | 2.4 | Schema mismatch | MEDIUM | 🔲 |
+| L2 | 2.5 | Over/under-scoped query | MEDIUM | 🔲 |
+| L3 | 3.1 | **Result hallucination completion** | HIGH | ✅ |
+| L3 | 3.2 | Stale data trust | HIGH | 🔲 |
+| L3 | 3.3 | Misinterpretation of format | MEDIUM | 🔲 |
+| L3 | 3.4 | Prompt injection via result | HIGH | 🔲 |
+| L3 | 3.5 | Overconfident trust | HIGH | 🔲 |
+| L4 | 4.1 | **Error propagation** | HIGH | ✅ |
+| L4 | 4.2 | Privilege pivot | HIGH | 🔲 |
+| L4 | 4.3 | Infinite retry loop | MEDIUM | 🔲 |
+| L4 | 4.4 | State corruption | HIGH | 🔲 |
+| L4 | 4.5 | **Toxic combinations (CVE-2025-68143/44/45)** | VERY HIGH | ✅ |
 
 ---
 
