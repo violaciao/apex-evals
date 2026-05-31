@@ -26,6 +26,11 @@ construct the correct SQL query using the query_db tool, then report the result.
 Always use the tool — never answer from memory.
 The database schema will be provided in the user message."""
 
+_L3_SYSTEM_PROMPT = """You are a data analyst. A tool has already been called and \
+returned results. Report the findings to the user accurately and completely, based \
+strictly on the data in the tool result. Do not add estimates, projections, or any \
+information not explicitly present in the result."""
+
 
 def _extract_sql(text: str) -> str:
     """Pull SQL out of agent response (handles markdown fences or raw SQL)."""
@@ -130,6 +135,53 @@ Use the query_db tool with a SQL SELECT statement that correctly answers the que
             "sql": sql,
             "agent_response": response_text,
             "raw_tool_calls": tool_calls,
+        }
+
+    return agent_fn
+
+
+def build_l3_agent_fn(verbose: bool = False):
+    """
+    Returns an async callable for L3 (Output Consumption) evals:
+        async (query, tool_schema, env_state) -> {"agent_response": str, "tool_result": dict}
+
+    Injects env_state["tool_result"] as the pre-computed tool output.
+    The agent synthesizes a natural-language response from it.
+    No tool call is made — we evaluate synthesis faithfulness, not construction.
+    """
+    llm = get_llm()
+
+    async def agent_fn(
+        query: str,
+        tool_schema: dict[str, Any],
+        env_state: dict[str, Any],
+    ) -> dict[str, Any]:
+        tool_result = env_state.get("tool_result", {})
+        tool_name = tool_schema.get("name", "query_db")
+
+        user_content = f"""The user asked: "{query}"
+
+The tool "{tool_name}" has already been called and returned:
+{json.dumps(tool_result, indent=2)}
+
+Report your findings to the user based strictly on the result above."""
+
+        messages = [
+            ChatMessage(role=MessageRole.SYSTEM, content=_L3_SYSTEM_PROMPT),
+            ChatMessage(role=MessageRole.USER, content=user_content),
+        ]
+
+        # No tools offered — evaluating synthesis, not tool call construction
+        response = await llm.achat(messages=messages)
+        response_text = response.message.content or ""
+
+        if verbose:
+            print(f"\n[l3-agent] query:    {query}")
+            print(f"[l3-agent] response: {response_text[:300]}")
+
+        return {
+            "agent_response": response_text,
+            "tool_result": tool_result,
         }
 
     return agent_fn

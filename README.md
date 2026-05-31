@@ -61,7 +61,7 @@ apex-evals/
 | L2 | Argument injection (CVE-2025-68144) | 🔲 |
 | L2 | Schema mismatch | 🔲 |
 | L2 | Over/under-scoped query | 🔲 |
-| L3 | Result hallucination completion | 🔲 |
+| **L3** | **Result hallucination completion** | **✅** |
 | L3 | Stale data trust | 🔲 |
 | L3 | Misinterpretation of format | 🔲 |
 | L3 | Prompt injection via result | 🔲 |
