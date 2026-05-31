@@ -1,5 +1,3 @@
-# APEX Evals
-
 ![APEX Evals](assets/images/title.png)
 
 **Agentic Pipeline EXecution** is a diagnostic and evaluation framework, companion repo to the [APEX research](https://violaconseil.com/research_agentic_ai_eval_phase_1_apex.html) published by Viola Conseil. Systematic evaluation of 19 failure modes across 4 layers of the agentic tool execution pipeline — the layer existing eval frameworks don't cover.
@@ -28,19 +26,41 @@ Response ← [L4 Chain] ← [L3 Output Consumption] ← Tool Result
 ```
 apex-evals/
 ├── apex/
-│   ├── config.py                        # profile switching (standard / free)
-│   ├── base.py                          # EvalModule base class
-│   ├── harness.py                       # LlamaIndex + Groq agent runner
-│   ├── layer1_tool_selection/           # 4 failure modes
-│   ├── layer2_input_construction/       # 5 failure modes  ← start here
-│   │   └── semantic_arg_error.py        # ✅ implemented
-│   ├── layer3_output_consumption/       # 5 failure modes
-│   ├── layer4_chain_multitool/          # 5 failure modes
-│   └── primitives/                      # 3 cross-layer scorers
-├── fixtures/                            # schemas, traces, vcrpy cassettes
-├── tests/
-│   └── layer2/
-│       └── test_semantic_arg_error.py   # ✅ implemented
+│   ├── config.py                        # LLM profile switching (free / anthropic / openai / gemini / mistral)
+│   ├── base.py                          # EvalModule base class, Scenario, EvalResult dataclasses
+│   ├── harness.py                       # LlamaIndex agent runners (L2 tool-call, L3 synthesis)
+│   │
+│   ├── layer1_tool_selection/
+│   │   ├── false_tool_trigger.py        # agent calls a tool when none was needed
+│   │   ├── tool_omission.py             # agent answers from memory instead of calling the tool
+│   │   ├── wrong_tool_selection.py      # agent picks the wrong tool from the available set
+│   │   └── ambiguous_tool_routing.py    # ambiguous intent routed to the wrong tool
+│   │
+│   ├── layer2_input_construction/
+│   │   ├── syntactic_arg_error.py       # malformed arguments cause tool to throw an explicit error
+│   │   ├── semantic_arg_error.py        # valid arguments that silently return wrong data
+│   │   ├── arg_injection.py             # user input embedded in args hijacks tool behaviour (CVE-2025-68144)
+│   │   ├── schema_mismatch.py           # wrong field names or types from an outdated schema
+│   │   └── over_under_scoped_query.py   # query scope too broad (over-fetches) or too narrow (misses data)
+│   │
+│   ├── layer3_output_consumption/
+│   │   ├── result_hallucination.py      # agent fabricates data not present in the tool result
+│   │   ├── stale_data_trust.py          # agent presents cached/lagged data as current
+│   │   ├── format_misinterpretation.py  # agent misreads timestamps, nulls, arrays, or booleans
+│   │   ├── prompt_injection_via_result.py # tool result contains instructions the agent follows
+│   │   └── overconfident_trust.py       # agent states probabilistic/estimated output as fact
+│   │
+│   ├── layer4_chain_multitool/
+│   │   ├── error_propagation.py         # failure in one tool silently corrupts downstream calls
+│   │   ├── privilege_pivot.py           # agent crosses an auth boundary via chained tool outputs
+│   │   ├── infinite_retry_loop.py       # agent retries a failing tool without exit condition
+│   │   ├── state_corruption.py          # earlier tool mutates state that breaks later calls
+│   │   └── toxic_combinations.py        # individually safe calls combine into dangerous behaviour (CVE-2025-68143/44/45)
+│   │
+│   └── primitives/                      # 3 cross-layer scorers (intent alignment, trust calibration, chain attribution)
+│
+├── fixtures/                            # SQL schemas, pre-recorded agent traces, vcrpy cassettes
+├── tests/                               # pytest suites mirroring apex/ layer structure
 └── reports/                             # eval run outputs
 ```
 
