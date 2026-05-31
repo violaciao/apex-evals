@@ -90,14 +90,19 @@ apex-evals/
 | L4 | Privilege pivot | 🔲 |
 | L4 | Infinite retry loop | 🔲 |
 | L4 | State corruption | 🔲 |
-| L4 | Toxic combinations | 🔲 |
+| **L4** | **Toxic combinations** | **✅** |
 
 ---
 
 ## Quickstart
 
 ```bash
-# Install
+# Create and activate a local virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies from pyproject.toml
+python -m pip install --upgrade pip
 pip install -e ".[dev]"
 
 # Set free-tier API key
