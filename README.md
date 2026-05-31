@@ -6,7 +6,7 @@
 
 ## The Problem
 
-Current eval frameworks measure what the model *says*. Nobody systematically evaluates what tools *do* — and whether the model correctly interpreted the result.
+Production agents fail differently from chat and RAG systems. Existing eval frameworks are strong at measuring final answer quality, retrieval quality, task completion, and observability, but they do not systematically evaluate the tool execution layer: whether the agent selected the right tool, built the right arguments, trusted the tool result appropriately, and attributed failures across multi-tool chains.
 
 ![Pipeline funnel](assets/images/funnel.png)
 
@@ -15,8 +15,8 @@ User → INTENT → Agent → [L1 Tool Selection] → [L2 Args] → TOOL CALL
                                                               ↓
 Response ← [L4 Chain] ← [L3 Output Consumption] ← Tool Result
 
-✓ MEASURED: input quality, final output
-✗ NOT EVALUATED: everything in between (19 failure modes)
+✓ COMMONLY MEASURED: final output quality, RAG retrieval, task completion, traces
+✗ MISSING: tool selection, argument correctness, output trust, chain attribution
 ```
 
 ---
@@ -88,7 +88,7 @@ apex-evals/
 | L3 | 3.5 | Overconfident trust | HIGH | 🔲 |
 | L4 | 4.1 | **Error propagation** | HIGH | ✅ |
 | **L4** | **4.2** | **Privilege pivot** | HIGH | ✅ |
-| L4 | 4.3 | Infinite retry loop | MEDIUM | 🔲 |
+| **L4** | **4.3** | **Infinite retry loop** | MEDIUM | ✅ |
 | L4 | 4.4 | State corruption | HIGH | 🔲 |
 | L4 | 4.5 | **Toxic combinations (CVE-2025-68143/44/45)** | VERY HIGH | ✅ |
 
