@@ -102,7 +102,7 @@ Start with `01_offline_scoring.ipynb`; it is the most stable onboarding path and
 | **L3** | **3.2** | **Stale data trust** | HIGH | ✅ |
 | L3 | 3.3 | Misinterpretation of format | MEDIUM | 🔲 |
 | **L3** | **3.4** | **Prompt injection via result** | HIGH | ✅ |
-| L3 | 3.5 | Overconfident trust | HIGH | 🔲 |
+| **L3** | **3.5** | **Overconfident trust** | HIGH | ✅ |
 | **L4** | **4.1** | **Error propagation** | HIGH | ✅ |
 | **L4** | **4.2** | **Privilege pivot** | HIGH | ✅ |
 | **L4** | **4.3** | **Infinite retry loop** | MEDIUM | ✅ |
