@@ -71,19 +71,7 @@ apex-evals/
 
 ---
 
-## Demos
-
-Interactive examples should live in `demos/`:
-
-- `01_offline_scoring.ipynb` — run evaluator scoring with no API key or LLM calls
-- `02_live_groq_eval.ipynb` — run a free-tier live eval with Groq
-- `03_compare_failure_modes.ipynb` — compare scores across implemented layers
-
-Start with `01_offline_scoring.ipynb`; it is the most stable onboarding path and works without API access.
-
----
-
-## Failure Mode Coverage
+## Diagnostic Mode Coverage
 
 ![Layer architecture](assets/images/layers.png)
 

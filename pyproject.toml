@@ -49,6 +49,9 @@ dev = [
     "mypy>=1.10.0",
     "notebook>=7.0.0",
     "ipykernel>=6.0.0",
+    # Demo notebooks
+    "matplotlib>=3.8.0",
+    "numpy>=1.26.0",
 ]
 
 [tool.pytest.ini_options]
