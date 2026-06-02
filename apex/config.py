@@ -2,10 +2,10 @@
 APEX Eval Configuration
 -----------------------
 APEX_PROFILE=free        → free backends (Groq Llama-3.1-8b + local stubs)  [default]
-APEX_PROFILE=anthropic   → Anthropic Claude Sonnet 4 + real tools
-APEX_PROFILE=openai      → OpenAI GPT-4o + real tools
-APEX_PROFILE=gemini      → Google Gemini 2.5 Pro + real tools
-APEX_PROFILE=mistral     → Mistral Large + real tools
+APEX_PROFILE=anthropic   → Anthropic Claude Opus 4.8 + real tools
+APEX_PROFILE=openai      → OpenAI GPT-5.4 + real tools
+APEX_PROFILE=gemini      → Google Gemini 3.1 Pro Preview + real tools
+APEX_PROFILE=mistral     → Mistral Medium 3.5 + real tools
 APEX_PROFILE=standard    → alias for anthropic (backwards compat)
 """
 
@@ -75,7 +75,7 @@ _CONFIGS: dict[str, ApexConfig] = {
         profile="anthropic",
         llm=LLMConfig(
             provider="anthropic",
-            model="claude-sonnet-4-20250514",
+            model="claude-opus-4-8",
             api_key_env="ANTHROPIC_API_KEY",
         ),
         tools=_STANDARD_TOOLS,
@@ -85,7 +85,7 @@ _CONFIGS: dict[str, ApexConfig] = {
         profile="openai",
         llm=LLMConfig(
             provider="openai",
-            model="gpt-4o",
+            model="gpt-5.4",
             api_key_env="OPENAI_API_KEY",
         ),
         tools=_STANDARD_TOOLS,
@@ -95,7 +95,7 @@ _CONFIGS: dict[str, ApexConfig] = {
         profile="gemini",
         llm=LLMConfig(
             provider="gemini",
-            model="gemini-2.5-pro",
+            model="gemini-3.1-pro-preview",
             api_key_env="GOOGLE_API_KEY",
         ),
         tools=_STANDARD_TOOLS,
@@ -105,7 +105,7 @@ _CONFIGS: dict[str, ApexConfig] = {
         profile="mistral",
         llm=LLMConfig(
             provider="mistral",
-            model="mistral-large-latest",
+            model="mistral-medium-3-5+1",
             api_key_env="MISTRAL_API_KEY",
         ),
         tools=_STANDARD_TOOLS,

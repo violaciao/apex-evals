@@ -128,10 +128,10 @@ APEX_PROFILE=free pytest tests/layer2/test_semantic_arg_error.py::test_live_all_
 | Profile | LLM | Tools | Cost |
 |---------|-----|-------|------|
 | `free` (default) | Groq Llama-3.1-8b-instant | SQLite stubs | $0 |
-| `anthropic` | Anthropic Claude Sonnet 4 | Testcontainers + APIs | pay-per-call |
-| `openai` | OpenAI GPT-4o | Testcontainers + APIs | pay-per-call |
-| `gemini` | Google Gemini 2.5 Pro | Testcontainers + APIs | pay-per-call |
-| `mistral` | Mistral Large | Testcontainers + APIs | pay-per-call |
+| `anthropic` | Anthropic Claude Opus 4.8 | Testcontainers + APIs | pay-per-call |
+| `openai` | OpenAI GPT-5.4 | Testcontainers + APIs | pay-per-call |
+| `gemini` | Google Gemini 3.1 Pro Preview | Testcontainers + APIs | pay-per-call |
+| `mistral` | Mistral Medium 3.5 | Testcontainers + APIs | pay-per-call |
 
 ```bash
 # Anthropic
